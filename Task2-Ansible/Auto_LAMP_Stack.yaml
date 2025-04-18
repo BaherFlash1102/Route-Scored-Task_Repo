@@ -1,0 +1,9 @@
+- name: Deploy LAMP Stack
+  hosts: webservers
+  become: true
+  
+  roles:
+    - apache
+    - mysql
+    - php
+    - firewall
