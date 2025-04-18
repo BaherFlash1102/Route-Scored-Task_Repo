@@ -1,0 +1,31 @@
+
+- name: Apache setup
+  block:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: true
+
+    - name: Deploy sample PHP page
+      template:
+        src: index.php.j2
+        dest: /var/www/html/index.php
+      notify: Restart Apache
+
+    - name: Remove default Apache index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+  rescue:
+    - debug:
+        msg: "Apache installation or configuration failed."
+
+  always:
+    - name: Ensure Apache is running
+      service:
+        name: apache2
+        state: started
+        enabled: true
+
